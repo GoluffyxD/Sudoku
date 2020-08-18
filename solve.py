@@ -60,10 +60,12 @@ def solve(mat,val):
                         # print("Valie: ",vals,i,j)
                         mat[i][j]=vals
                         # print(i,j)
-                        if(solve(mat,val+1) == -1):
+                        res=solve(mat,val+1)
+                        if(res == -1):
                             mat[i][j]=0
                             # continue
                         else:
+                            mat=res
                             break
                 else:
                     return -1
