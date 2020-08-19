@@ -1,6 +1,5 @@
 from sudoku import *
-
-count=0
+import copy
 
 def solve_choice(mat):
     looks=0
@@ -17,7 +16,8 @@ def solve_choice(mat):
                 if len(possible[i][j])==1:
                     mat[i][j]=possible[i][j][0]
                     possible = getChoiceMatrix(mat)
-                    print("Inserted {} to ({},{}), Elimination Choice".format(mat[i][j],i,j))
+                    # print("Inserted {} to ({},{}), Elimination Choice".format(mat[i][j],i,j))
+                    print("Looks like {} is the only number that can be added in {},{}".format(mat[i][j],i+1,j+1))
                     output_Sudoku(mat)
                     changed=1
         # Check Row Combination
@@ -35,7 +35,8 @@ def solve_choice(mat):
                     # print("Changed",i,possible[i])
                     possible = getChoiceMatrix(mat)
                     # print("Changed",i,possible[i])
-                    print("Inserted {} in ({},{}), Row Choice".format(val,i,ind))
+                    # print("Inserted {} in ({},{}), Row Choice".format(val,i,ind))
+                    print("Looking at the {} row,it seems as though {} is the only number that can be added in {},{}".format(i+1,val,i+1,ind+1))
                     output_Sudoku(mat)
                     changed=1
         
@@ -50,7 +51,9 @@ def solve_choice(mat):
                 if count == 1:
                     mat[ind][i]= val
                     possible = getChoiceMatrix(mat)
-                    print("Inserted {} in ({},{}), Column Choice".format(val,ind,i))
+                    # print("Inserted {} in ({},{}), Column Choice".format(val,ind,i))
+                    print("Looking at the {} column,it seems as though {} is the only number that can be added in {},{}".format(i+1,val,ind+1,i+1))
+
                     output_Sudoku(mat)
                     changed=1
 
@@ -68,12 +71,13 @@ def solve_choice(mat):
                 if count == 1:
                     mat[indx][indy] = val
                     possible = getChoiceMatrix(mat)
-                    print("Inserted {} in ({},{}), Small Square Choice".format(val,indx,indy))
+                    # print("Inserted {} in ({},{}), Small Square Choice".format(val,indx,indy))
+                    print("Based on the small square at {},{} seems to be right for {},{}".format(i+1,val,indx+1,indy+1))
                     output_Sudoku(mat)
                     changed=1
         # break
         if changed == 0:
-            print("Stuck")
+            print("Hmmm I'm Stuck")
             output_Sudoku(mat)
             possible = getChoiceMatrix(mat)
             printChoiceMatrix(possible,mat)
@@ -81,13 +85,23 @@ def solve_choice(mat):
     return possible,mat
             # break
     # output_Sudoku(mat)
+
+main_sudoku = sudoku3
+# main_sudoku = input_Sudoku()
 print("Input")
-output_Sudoku(sudoku1)
+output_Sudoku(main_sudoku )
 print("Choices")
 # possible = getChoiceMatrix(sudoku2)
 # printChoiceMatrix(possible,sudoku2)
-op_possible,op_mat = solve_choice(sudoku1)
+su= copy.deepcopy(main_sudoku )
+op_possible,op_mat = solve_choice(main_sudoku)
 output_Sudoku(op_mat)
+# print(sudoku2)
+# print(su)
+# outputbacktrack= solve_backtrack(su)
+# print(outputbacktrack)
+print("Absolute Solution")
+output_Sudoku(solve_backtrack(su ))
 # red_possible = reduceChoiceMatrix(op_possible)
 # print("Reduced Matrix")
 # printChoiceMatrix(red_possible,op_mat)

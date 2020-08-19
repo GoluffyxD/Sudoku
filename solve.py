@@ -47,6 +47,6 @@ def solve(mat,val):
     return mat
 
 
-output = solve(sudoku2,0)
+output = solve(sudoku3,0)
 output_Sudoku(output)
 print("Count: ",count)

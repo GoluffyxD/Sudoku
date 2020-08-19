@@ -1,11 +1,42 @@
 
-
+import copy
+from texttable import Texttable
 
 pos={0:(0,0),1:(0,3),2:(0,6),3:(3,0),4:(3,3),5:(3,6),6:(6,0),7:(6,3),8:(6,6)}
-sudoku1=[[0, 0, 0, 2, 6, 0, 7, 0, 1], [6, 8, 0, 0, 7, 0, 0, 9, 0], [1, 9, 0, 0, 0, 4, 5, 0, 0], [8, 2, 0, 1, 0, 0, 0, 4, 0], [0, 0, 4, 6, 0, 2, 9, 0, 0], [0, 5, 0, 0, 0, 3, 0, 2, 8], [0, 0, 9, 3, 0, 0, 0, 7, 4], [0, 4, 0, 0, 5, 0, 0, 3, 6], [7, 0, 3, 0, 1, 8, 0, 0, 0]]
-sudoku2 =[[0,0,7,0,0,0,0,0,4],[0,0,0,6,5,0,0,0,2],[0,2,0,8,0,1,0,6,0],[0,1,0,0,0,0,0,0,0],[0,0,0,0,4,0,7,8,5],[5,0,2,0,0,0,0,0,0]
-,[1,0,0,0,0,0,0,0,0],[0,9,4,0,0,0,0,0,0],[0,0,0,9,2,0,0,0,6]]
 
+sudoku1=[   
+        [0, 0, 0, 2, 6, 0, 7, 0, 1], 
+        [6, 8, 0, 0, 7, 0, 0, 9, 0],
+        [1, 9, 0, 0, 0, 4, 5, 0, 0], 
+        [8, 2, 0, 1, 0, 0, 0, 4, 0], 
+        [0, 0, 4, 6, 0, 2, 9, 0, 0], 
+        [0, 5, 0, 0, 0, 3, 0, 2, 8], 
+        [0, 0, 9, 3, 0, 0, 0, 7, 4], 
+        [0, 4, 0, 0, 5, 0, 0, 3, 6], 
+        [7, 0, 3, 0, 1, 8, 0, 0, 0]
+        ]
+sudoku2 =[
+        [0,0,7,0,0,0,0,0,4],
+        [0,0,0,6,5,0,0,0,2],
+        [0,2,0,8,0,1,0,6,0],
+        [0,1,0,0,0,0,0,0,0],
+        [0,0,0,0,4,0,7,8,5],
+        [5,0,2,0,0,0,0,0,0],       
+        [1,0,0,0,0,0,0,0,0],
+        [0,9,4,0,0,0,0,0,0],
+        [0,0,0,9,2,0,0,0,6]
+        ]
+sudoku3 = [
+        [1,0,0,7,0,0,0,2,3],
+        [0,2,0,0,0,0,0,7,1],
+        [0,0,9,0,0,4,0,0,0],
+        [9,0,0,0,3,6,0,8,0],
+        [7,0,6,0,0,0,0,0,0],
+        [0,0,0,0,0,0,5,0,0],
+        [0,0,0,0,0,0,0,5,0],
+        [0,0,0,0,5,0,0,0,7],
+        [4,0,3,0,1,0,0,0,0]
+]
 def input_Sudoku():
     mat=[]
     print("Input Sudoku: ")
@@ -16,8 +47,11 @@ def input_Sudoku():
 
 def output_Sudoku(mat):
     print("Output: ")
+    t=Texttable()
     for i in mat:
-        print(*i)
+        # print(*i)
+        t.add_row(i)
+    print(t.draw())
 
 def chkPossible(mat,x,y,val):
     if val in mat[x][:]:
@@ -45,8 +79,17 @@ def getChoiceMatrix(mat):
             else:
                 temp.append([])
         possible.append(temp)
-    while possible!= reduceChoiceMatrix(possible):
-        possible = reduceChoiceMatrix(possible)
+    print("Initial Choice Matrix")
+    printChoiceMatrix(possible,mat)
+    while True:
+        reduced = reduceChoiceMatrix(possible)
+        if possible == reduced:
+            print("Broke out of loop")
+            break
+        else:
+            possible = reduced
+        print("After:")
+        printChoiceMatrix(possible,mat)
     return possible
 
 def chkZero(mat):
@@ -56,36 +99,46 @@ def chkZero(mat):
     return False
 
 def printChoiceMatrix(possible,mat):
+    t=Texttable()
     for i in range(9):
+        row=[]
         for j in range(9):
             if possible[i][j]==[]:
-                print(mat[i][j],'\t',end='')
+                # print(mat[i][j],'\t',end='')
+                row.append(mat[i][j])
             else:
                 str1='c'
                 for val in possible[i][j]:
                     str1+=str(val)
-                # print('(',end='')
-                # for el in possible[i][j]:
-                    # print(el,',',end='')
-                # print(')',end='')
-                print(str1,'\t',end='')
+                # print(str1,'\t',end='')
                 # print('\t',end='')
-            print('|',end='')
-        print('\n')
+                row.append(str1)
+            # print('|',end='')
+        t.add_row(row)
+        # print('\n')
+    print(t.draw())
 
-def reduceChoiceMatrix(possible):
+def reduceChoiceMatrix(possible_par):
+    possible = copy.deepcopy(possible_par)
     #Row Reduce
     # temp = possib#le.copy()
     for i in range(9):
+        freq={}
         for j in range(9):
-            if possible[i][j] in possible[i][j+1:]:
-                val = possible[i][j]
-                for k in range(9):
-                    if len(possible[i][k])>len(val):
-                        for el in val:
-                            if el in possible[i][k]:
+            if possible[i][j]!=[]:
+                if tuple(possible[i][j]) in freq.keys():
+                    freq[tuple(possible[i][j])]+=1
+                else:
+                    freq[tuple(possible[i][j])]=1
+        for el in freq.keys():
+            if freq[el]>1 and freq[el]==len(el):
+                for m in range(9):
+                    if len(possible[i][m])>len(el):
+                        print("Removing {} across row {} choices".format(el,i))
+                        for val in el:
+                            if val in possible[i][m]:
                                 try:
-                                    possible[i][k].remove(el)
+                                    possible[i][m].remove(val)
                                 except:
                                     pass
     
@@ -93,14 +146,17 @@ def reduceChoiceMatrix(possible):
     for i in range(9):
         freq={}
         for j in range(9):
-            if tuple(possible[j][i]) in freq.keys():
-                freq[tuple(possible[j][i])]+=1
-            else:
-                freq[tuple(possible[j][i])]=1
+            if possible[j][i]!=[]:
+                if tuple(possible[j][i]) in freq.keys():
+                    freq[tuple(possible[j][i])]+=1
+                else:
+                    freq[tuple(possible[j][i])]=1
+        # del freq[()]
         for el in freq.keys():
-            if freq[el]>1 and el!=():
+            if freq[el]>1 and freq[el]==len(el):
                 for m in range(9):
                     if len(possible[m][i])>len(el):
+                        print("Removing {} across column {} choices".format(el,i))
                         for val in el:
                             if val in possible[m][i]:
                                 try:
@@ -114,15 +170,18 @@ def reduceChoiceMatrix(possible):
         freq={}
         for k in range(startx,startx+3):
             for l in range(starty,starty+3):
-                if tuple(possible[k][l]) in freq.keys():
-                    freq[tuple(possible[k][l])]+=1
-                else:
-                    freq[tuple(possible[k][l])]=1
+                if possible[k][l]!=[]:
+                    if tuple(possible[k][l]) in freq.keys():
+                        freq[tuple(possible[k][l])]+=1
+                    else:
+                        freq[tuple(possible[k][l])]=1
+        # del freq[()]
         for el in freq.keys():
-            if freq[el]>1 and el!=():
+            if freq[el]>1 and freq[el]==len(el):
                 for k in range(startx,startx+3):
                     for l in range(starty,starty+3):
                         if len(possible[k][l])>len(el):
+                            print("Removing {} in small square {} choices".format(el,i))
                             for val in el:
                                 if val in possible[k][l]:
                                     try:
@@ -130,4 +189,22 @@ def reduceChoiceMatrix(possible):
                                     except:
                                         pass
     
+    
     return possible
+
+def solve_backtrack(mat):
+    for i in range(9):
+        for j in range(9):
+            if mat[i][j]==0:
+                for vals in range(1,10):
+                    if chkPossible(mat,i,j,vals):
+                        mat[i][j]=vals
+                        res=solve_backtrack(mat)
+                        if(res == -1):
+                            mat[i][j]=0
+                        else:
+                            mat=res
+                            break
+                else:
+                    return -1
+    return mat
