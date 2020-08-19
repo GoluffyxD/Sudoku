@@ -45,6 +45,8 @@ def getChoiceMatrix(mat):
             else:
                 temp.append([])
         possible.append(temp)
+    while possible!= reduceChoiceMatrix(possible):
+        possible = reduceChoiceMatrix(possible)
     return possible
 
 def chkZero(mat):
@@ -70,3 +72,62 @@ def printChoiceMatrix(possible,mat):
                 # print('\t',end='')
             print('|',end='')
         print('\n')
+
+def reduceChoiceMatrix(possible):
+    #Row Reduce
+    # temp = possib#le.copy()
+    for i in range(9):
+        for j in range(9):
+            if possible[i][j] in possible[i][j+1:]:
+                val = possible[i][j]
+                for k in range(9):
+                    if len(possible[i][k])>len(val):
+                        for el in val:
+                            if el in possible[i][k]:
+                                try:
+                                    possible[i][k].remove(el)
+                                except:
+                                    pass
+    
+    # Column Reduce
+    for i in range(9):
+        freq={}
+        for j in range(9):
+            if tuple(possible[j][i]) in freq.keys():
+                freq[tuple(possible[j][i])]+=1
+            else:
+                freq[tuple(possible[j][i])]=1
+        for el in freq.keys():
+            if freq[el]>1 and el!=():
+                for m in range(9):
+                    if len(possible[m][i])>len(el):
+                        for val in el:
+                            if val in possible[m][i]:
+                                try:
+                                    possible[m][i].remove(val)
+                                except:
+                                    pass
+    
+    # Small Square Reduce
+    for i in range(9):
+        (startx,starty)=pos[i]
+        freq={}
+        for k in range(startx,startx+3):
+            for l in range(starty,starty+3):
+                if tuple(possible[k][l]) in freq.keys():
+                    freq[tuple(possible[k][l])]+=1
+                else:
+                    freq[tuple(possible[k][l])]=1
+        for el in freq.keys():
+            if freq[el]>1 and el!=():
+                for k in range(startx,startx+3):
+                    for l in range(starty,starty+3):
+                        if len(possible[k][l])>len(el):
+                            for val in el:
+                                if val in possible[k][l]:
+                                    try:
+                                        possible[k][l].remove(val)
+                                    except:
+                                        pass
+    
+    return possible
