@@ -189,6 +189,44 @@ def reduceChoiceMatrix(possible_par):
                                     except:
                                         pass
     
+    # Remove assumptions from small square
+    for i in range(9):
+        (startx,starty)=pos[i]
+        for vals in range(1,10):
+            xpos=set()
+            ypos=set()
+            for k in range(startx,startx+3):
+                for l in range(starty,starty+3):
+                    if vals in possible[k][l]:
+                        xpos.add(k)
+                        ypos.add(l)
+            # print("square: ",i,"vals: ",vals,"xpos:",xpos,"ypos:",ypos)
+            if len(xpos)==1:
+                for ik in xpos:
+                    el = ik
+                for rowel in range(9):
+                    if rowel in range(starty,starty+3):
+                        continue
+                    if vals in possible[el][rowel]:
+                        try:
+                            possible[el][rowel].remove(vals)
+                        except:
+                            pass
+            elif len(ypos)==1:
+                # print(ypos,i)
+                for ik in ypos:
+                    el = ik
+                    # print(el)
+                for colel in range(9):
+                    if colel in range(startx,startx+3):
+                        continue
+                    if vals in possible[colel][el]:
+                        try:
+                            possible[colel][el].remove(vals)
+                        except:
+                            pass
+
+    
     
     return possible
 
