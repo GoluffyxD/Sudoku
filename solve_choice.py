@@ -1,4 +1,4 @@
-from sudoku import *
+from Modules.sudoku import *
 import copy
 
 def solve_choice(mat):

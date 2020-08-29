@@ -1,12 +1,9 @@
-# Button:
-    # size_hint: 0.1,0.1
-
 
 <HomeScreen>:
     FloatLayout:
         GridLayout:
-            pos_hint: { "top" : 1, "left": 1}
-            size_hint : 1,0.8
+            pos_hint: { "top" : 0.9, 'right':0.9}
+            size_hint : 0.8,0.7
             cols: 9
             Button:
                 id: 0
@@ -476,3 +473,7 @@
                 text: 'Load SUdoku'
                 on_release:
                     root.loadmat()
+            MDFloatingActionButton:
+                text: "1"
+                on_release:
+                    root.hint()
