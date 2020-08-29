@@ -23,19 +23,6 @@ sudoku =[
 [0,0,0,9,2,0,0,0,6]
 ]
 
-# def chkPossible(mat,x,y,val):
-#     pos={0:(0,0),1:(0,3),2:(0,6),3:(3,0),4:(3,3),5:(3,6),6:(6,0),7:(6,3),8:(6,6)}
-#     if val in mat[x][:]:
-#         return False
-#     if val in [temp[y] for temp in mat ]:
-#         return False
-#     posKey= 3*(x//3) + y//3
-#     (startx,starty)=pos[posKey]
-#     for i in range(startx,startx+3):
-#         for j in range(starty,starty+3):
-#             if mat[i][j]== val:
-#                 return False
-#     return True
 
 def get_key(a,v):
     for key,val in a.items():
