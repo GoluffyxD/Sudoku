@@ -1,1 +1,3 @@
 .vscode
+.gitignore
+./Modules/__pycache__
