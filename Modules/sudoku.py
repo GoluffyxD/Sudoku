@@ -37,21 +37,6 @@ sudoku3 = [
         [0,0,0,0,5,0,0,0,7],
         [4,0,3,0,1,0,0,0,0]
 ]
-def input_Sudoku():
-    mat=[]
-    print("Input Sudoku: ")
-    for i in range(9):
-        l=[int(i) for i in input().split()]
-        mat.append(l)
-    return mat
-
-def output_Sudoku(mat):
-    print("Output: ")
-    t=Texttable()
-    for i in mat:
-        # print(*i)
-        t.add_row(i)
-    print(t.draw())
 
 def chkPossible(mat,x,y,val):
     if val in mat[x][:]:
@@ -81,7 +66,7 @@ def getChoiceMatrix(mat):
     while True:
         reduced = reduceChoiceMatrix(possible)
         if possible == reduced:
-            print("Broke out of loop")
+            print("Broke out of loop! No further reductions possible")
             break
         else:
             possible = reduced
@@ -101,12 +86,12 @@ def printChoiceMatrix(possible,mat):
         row=[]
         for j in range(9):
             if possible[i][j]==[]:
-                # print(mat[i][j],'\t',end='')
                 row.append(mat[i][j])
             else:
-                str1='c'
-                for val in possible[i][j]:
-                    str1+=str(val)
+                # str1='c'
+                str1 = 'c'+ '('+ ",".join([str(i) for i in possible[i][j]])+')'
+                # for val in possible[i][j]:
+                    # str1+=str(val)
                 # print(str1,'\t',end='')
                 # print('\t',end='')
                 row.append(str1)
@@ -227,22 +212,6 @@ def reduceChoiceMatrix(possible_par):
     
     return possible
 
-def solve_backtrack(mat):
-    for i in range(9):
-        for j in range(9):
-            if mat[i][j]==0:
-                for vals in range(1,10):
-                    if chkPossible(mat,i,j,vals):
-                        mat[i][j]=vals
-                        res=solve_backtrack(mat)
-                        if(res == -1):
-                            mat[i][j]=0
-                        else:
-                            mat=res
-                            break
-                else:
-                    return -1
-    return mat
 
 def solve_single_choice(mat):
     possible = getChoiceMatrix(mat)
