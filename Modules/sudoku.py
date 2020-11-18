@@ -88,16 +88,9 @@ def printChoiceMatrix(possible,mat):
             if possible[i][j]==[]:
                 row.append(mat[i][j])
             else:
-                # str1='c'
                 str1 = 'c'+ '('+ ",".join([str(i) for i in possible[i][j]])+')'
-                # for val in possible[i][j]:
-                    # str1+=str(val)
-                # print(str1,'\t',end='')
-                # print('\t',end='')
                 row.append(str1)
-            # print('|',end='')
         t.add_row(row)
-        # print('\n')
     print(t.draw())
 
 def reduceChoiceMatrix(possible_par):
@@ -211,85 +204,3 @@ def reduceChoiceMatrix(possible_par):
     
     
     return possible
-
-
-def solve_single_choice(mat):
-    possible = getChoiceMatrix(mat)
-    # Check Elimination
-    for i in range(9):
-        for j in range(9):
-            if len(possible[i][j])==1:
-                mat[i][j]=possible[i][j][0]
-                # print("Looks like {} is the only number that can be added in {},{}".format(mat[i][j],i+1,j+1))
-                # output_Sudoku(mat)
-                return (i,j,mat[i][j])
-                # changed=1
-    # Check Row Combination
-    for i in range(9):
-        # print('Row: ',i,possible[i])
-        for val in range(1,10):
-            count=0
-            for k in range(9):
-                if val in possible[i][k]:
-                    ind=k
-                    count+=1
-            if count == 1:
-                mat[i][ind] = val
-                return (i,ind,val)
-                # print("Val: ",val)
-                # print("Changed",i,possible[i])
-                # possible = getChoiceMatrix(mat)
-                # print("Changed",i,possible[i])
-                # print("Inserted {} in ({},{}), Row Choice".format(val,i,ind))
-                # print("Looking at the {} row,it seems as though {} is the only number that can be added in {},{}".format(i+1,val,i+1,ind+1))
-                # output_Sudoku(mat)
-                # changed=1
-        
-    # Check Column Combination
-    for i in range(9):
-        for val in range(1,10):
-            count=0
-            for k in range(9):
-                if val in possible[k][i]:
-                    ind=k
-                    count+=1
-            if count == 1:
-                mat[ind][i]= val
-                return (ind,i,val)
-                # possible = getChoiceMatrix(mat)
-                # print("Inserted {} in ({},{}), Column Choice".format(val,ind,i))
-                # print("Looking at the {} column,it seems as though {} is the only number that can be added in {},{}".format(i+1,val,ind+1,i+1))
-
-                # output_Sudoku(mat)
-                # changed=1
-
-    # Check Small Squares
-    for i in range(9):
-        (startx,starty) = pos[i]
-        for val in range(1,10):
-            count=0
-            for k in range(startx,startx+3):
-                for l in range(starty,starty+3):
-                    if val in possible[k][l]:
-                        count+=1
-                        indx=k
-                        indy=l
-            if count == 1:
-                mat[indx][indy] = val
-                return (indx,indy,val)
-                # possible = getChoiceMatrix(mat)
-                # print("Inserted {} in ({},{}), Small Square Choice".format(val,indx,indy))
-                # print("Based on the small square at {},{} seems to be right for {},{}".format(i+1,val,indx+1,indy+1))
-                # output_Sudoku(mat)
-                # changed=1
-    # break
-    return -1
-    # if changed == 0:
-        # print("Hmmm I'm Stuck")
-        # output_Sudoku(mat)
-        # possible = getChoiceMatrix(mat)
-        # printChoiceMatrix(possible,mat)
-        # return possible,mat
-    # return possible,mat
-            # break
-    # output_Sudoku(mat)
