@@ -14,7 +14,7 @@ This application aims to provide a set of moves that can help solve a sudoku in 
 
 * Before running the application, run the below command.    
   `pip install -r requirements.txt`
-* Add the Sudoku you wish to solve in input_sudoku.txt
+* Add the Sudoku you wish to solve in input_sudoku.txt  
 ![Image2](./Screenshots/InputSudoku.png)
 * To check if the sudoku is valid and has only one solution,  
   `python check_solvable.py`
