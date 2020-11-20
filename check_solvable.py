@@ -1,7 +1,7 @@
 from Modules.solve_BruteForce import solve_bruteForce
 from Modules.input_output import createSudoku
 from Modules.sudoku import chkZero 
-mat = createSudoku("./input_sudoku.txt")
+mat = createSudoku("./Challenges/sudoku1.txt")
 
 sol,val  = solve_bruteForce(mat,0)
 
